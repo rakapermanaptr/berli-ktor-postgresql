@@ -7,18 +7,11 @@ import org.jetbrains.exposed.sql.Database
 import java.net.URI
 
 fun Application.configureDatabases() {
-    val rawUrl = System.getenv("DATABASE_URL") ?: error("Missing DATABASE_URL")
-    val uri = URI(rawUrl)
-
-    val dbUrl = "jdbc:postgresql://${uri.host}:${uri.port}${uri.path}"
-    val dbUser = uri.userInfo.split(":")[0]
-    val dbPassword = uri.userInfo.split(":")[1]
-
     val config = HikariConfig().apply {
-        jdbcUrl = dbUrl
+        jdbcUrl = "jdbc://postgres:HNCVIbsTwTeKNuLrdudgFGjpPVWhVXJI@postgres.railway.internal:5432/railway"
         driverClassName = "org.postgresql.Driver"
-        username = dbUser
-        password = dbPassword
+        username = "postgres"
+        password = "HNCVIbsTwTeKNuLrdudgFGjpPVWhVXJI"
         isReadOnly = false
         maximumPoolSize = 8
         transactionIsolation = "TRANSACTION_SERIALIZABLE"
