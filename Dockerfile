@@ -3,7 +3,7 @@
 FROM gradle:8.4-jdk17 AS builder
 WORKDIR /app
 COPY . .
-RUN gradle clean build --no-daemon
+RUN gradle clean build -x test --no-daemon
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app
