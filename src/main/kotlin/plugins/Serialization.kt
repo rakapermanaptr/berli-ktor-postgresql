@@ -18,54 +18,55 @@ fun Application.configureSerialization(repository: BerliRepository) {
         json()
     }
     routing {
-        get("/reports") {
-            val reports = repository.getAllReport()
-            call.respond(successResponse(reports, "Reports retrieved"))
-        }
-
-        route("/report") {
-            post {
-                val report = call.receive<Report>()
-                repository.postReport(report)
-                call.respond(successResponse(null, "Report created"))
+        route("/api") {
+            get("/reports") {
+                val reports = repository.getAllReport()
+                call.respond(successResponse(reports, "Reports retrieved"))
             }
-            get("/{id}") {
+
+            route("/report") {
+                post {
+                    val report = call.receive<Report>()
+                    repository.postReport(report)
+                    call.respond(successResponse(null, "Report created"))
+                }
+                get("/{id}") {
+                    val id = call.parameters["id"]?.toIntOrNull()
+                    if (id == null) {
+                        call.respond(HttpStatusCode.BadRequest, errorResponse("Invalid or missing ID"))
+                        return@get
+                    }
+
+                    val report = repository.getReport(id)
+                    if (report == null) {
+                        call.respond(HttpStatusCode.NotFound, errorResponse("Report not found"))
+                        return@get
+                    }
+
+                    call.respond(successResponse(report, "Report retrieved"))
+                }
+            }
+
+            get("/events") {
+                val events = repository.getAllEvent()
+                call.respond(successResponse(events, "Events retrieved"))
+            }
+
+            get("/event/{id}") {
                 val id = call.parameters["id"]?.toIntOrNull()
                 if (id == null) {
                     call.respond(HttpStatusCode.BadRequest, errorResponse("Invalid or missing ID"))
                     return@get
                 }
 
-                val report = repository.getReport(id)
-                if (report == null) {
-                    call.respond(HttpStatusCode.NotFound, errorResponse("Report not found"))
+                val event = repository.getEvent(id)
+                if (event == null) {
+                    call.respond(HttpStatusCode.NotFound, errorResponse("Event not found"))
                     return@get
                 }
 
-                call.respond(successResponse(report, "Report retrieved"))
+                call.respond(successResponse(event, "Event retrieved"))
             }
         }
-
-        get("/events") {
-            val events = repository.getAllEvent()
-            call.respond(successResponse(events, "Events retrieved"))
-        }
-
-        get("/event/{id}") {
-            val id = call.parameters["id"]?.toIntOrNull()
-            if (id == null) {
-                call.respond(HttpStatusCode.BadRequest, errorResponse("Invalid or missing ID"))
-                return@get
-            }
-
-            val event = repository.getEvent(id)
-            if (event == null) {
-                call.respond(HttpStatusCode.NotFound, errorResponse("Event not found"))
-                return@get
-            }
-
-            call.respond(successResponse(event, "Event retrieved"))
-        }
-
     }
 }
