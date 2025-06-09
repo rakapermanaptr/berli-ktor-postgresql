@@ -9,7 +9,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 fun reportDaoToModel(dao: ReportDAO) = Report(
     id = dao.id.value,
     report = dao.report,
-    reportDetail = dao.reportDetail,
+    reportDetails = dao.reportDetail,
     reporter = dao.reporter,
     location = dao.location
 )

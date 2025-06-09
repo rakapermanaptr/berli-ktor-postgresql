@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Report(
     val id: Int? = null,
     val report: String,
-    val reportDetail: String,
+    val reportDetails: String,
     val location: String,
     val reporter: String,
 )
