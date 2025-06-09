@@ -8,7 +8,7 @@ import java.net.URI
 
 fun Application.configureDatabases() {
     val config = HikariConfig().apply {
-        jdbcUrl = "jdbc://postgres:HNCVIbsTwTeKNuLrdudgFGjpPVWhVXJI@postgres.railway.internal:5432/railway"
+        jdbcUrl = "jdbc:postgres://postgres:HNCVIbsTwTeKNuLrdudgFGjpPVWhVXJI@postgres.railway.internal:5432/railway"
         driverClassName = "org.postgresql.Driver"
         username = "postgres"
         password = "HNCVIbsTwTeKNuLrdudgFGjpPVWhVXJI"
