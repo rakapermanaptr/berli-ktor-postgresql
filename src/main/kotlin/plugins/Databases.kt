@@ -6,11 +6,15 @@ import io.ktor.server.application.Application
 import org.jetbrains.exposed.sql.Database
 
 fun Application.configureDatabases() {
+    val dbUrl = System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/berli_database"
+    val dbUser = System.getenv("DB_USER") ?: "admin"
+    val dbPassword = System.getenv("DB_PASSWORD") ?: "secret"
+
     val config = HikariConfig().apply {
-        jdbcUrl = "jdbc:postgresql://localhost:5432/berli_database"
+        jdbcUrl = dbUrl
         driverClassName = "org.postgresql.Driver"
-        username = "admin"
-        password = "secret"
+        username = dbUser
+        password = dbPassword
         isReadOnly = false
         maximumPoolSize = 8
         transactionIsolation = "TRANSACTION_SERIALIZABLE"
