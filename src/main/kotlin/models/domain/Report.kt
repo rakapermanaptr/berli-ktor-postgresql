@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Report(
-    val id: Int,
+    val id: Int? = null,
     val username: String,
     @SerialName("user_id")
     val userId: Int,
