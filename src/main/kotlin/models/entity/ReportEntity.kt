@@ -22,15 +22,15 @@ fun reportDaoToModel(dao: ReportDAO) = Report(
 
 object ReportTable : IntIdTable("report") {
     val username = varchar("username", 50)
-    val userId = integer("userId")
+    val userId = integer("user_id")
     val complaint = varchar("complaint", 100)
-    val complaintDetail = varchar("complaintDetail", 300)
+    val complaintDetail = varchar("complaint_details", 300)
     val image = varchar("image", 500)
     val location = varchar("location", 300)
-    val locationDetail = varchar("locationDetail", 100)
+    val locationDetail = varchar("location_details", 100)
     val status = varchar("status", 20)
-    val likeNumber = integer("likeNumber")
-    val dateCreated = varchar("dateCreated", 100)
+    val likeNumber = integer("like_number")
+    val dateCreated = varchar("date_created", 100)
 }
 
 class ReportDAO(id: EntityID<Int>) : IntEntity(id) {
