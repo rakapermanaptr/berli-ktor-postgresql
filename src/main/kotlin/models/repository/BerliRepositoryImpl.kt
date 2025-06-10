@@ -18,10 +18,16 @@ class BerliRepositoryImpl: BerliRepository {
 
     override suspend fun postReport(report: Report): Unit = suspendTransaction {
         ReportDAO.new {
-            this.report = report.report
-            reportDetail = report.reportDetails
-            reporter = report.reporter
+            username = report.username
+            userId = report.userId
+            complaint = report.complaint
+            complaintDetail = report.complaintDetails
+            image = report.image
             location = report.location
+            locationDetail = report.locationDetails
+            status = report.status
+            likeNumber = report.likeNumber
+            dateCreated = report.dateCreated
         }
     }
 
