@@ -6,6 +6,7 @@ import com.creospace.models.repository.BerliRepository
 import com.creospace.models.domain.Report
 import com.creospace.utils.errorResponse
 import com.creospace.utils.successResponse
+import com.sun.tools.jdeprscan.Main.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -13,6 +14,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import models.request.LoginRequest
 
 fun Application.configureSerialization(repository: BerliRepository) {
     install(ContentNegotiation) {
@@ -69,11 +71,39 @@ fun Application.configureSerialization(repository: BerliRepository) {
                 call.respond(successResponse(event, "Event retrieved"))
             }
 
-            route("/account") {
-                post {
-                    val account = call.receive<Account>()
-                    repository.postRegisterAccount(account)
-                    call.respond(successResponse(null, "Account created"))
+            route("/auth") {
+                route("/register") {
+                    post {
+                        val account = call.receive<Account>()
+                        repository.postRegisterAccount(account)
+                        call.respond(successResponse(null, "Account created"))
+                    }
+                }
+
+                route("/login") {
+                   post {
+                       val req = try {
+                           call.receive<LoginRequest>()
+                       } catch (e: Exception) {
+                           call.respond(HttpStatusCode.BadRequest, errorResponse("Invalid request body"))
+                           return@post
+                       }
+
+                       val account = try {
+                           repository.getAccountLogin(req.username, req.password)
+                       } catch (e: Exception) {
+                           call.application.environment.log.error("Login error", e)
+                           call.respond(HttpStatusCode.InternalServerError, errorResponse("Internal server error"))
+                           return@post
+                       }
+
+                       if (account == null) {
+                           call.respond(HttpStatusCode.Unauthorized, errorResponse("Invalid username or password"))
+                           return@post
+                       }
+
+                       call.respond(HttpStatusCode.OK, successResponse(account))
+                   }
                 }
             }
         }

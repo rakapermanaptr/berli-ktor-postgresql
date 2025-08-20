@@ -4,13 +4,16 @@ import com.creospace.models.domain.Account
 import com.creospace.models.domain.Event
 import com.creospace.models.domain.Report
 import com.creospace.models.entity.AccountDAO
+import com.creospace.models.entity.AccountTable
 import com.creospace.models.entity.EventDAO
 import com.creospace.models.entity.EventTable
 import com.creospace.models.entity.ReportDAO
 import com.creospace.models.entity.ReportTable
+import com.creospace.models.entity.accountDaoToModel
 import com.creospace.models.entity.eventDaoToModel
 import com.creospace.models.entity.reportDaoToModel
 import com.creospace.utils.suspendTransaction
+import org.jetbrains.exposed.sql.and
 
 class BerliRepositoryImpl: BerliRepository {
 
@@ -61,5 +64,15 @@ class BerliRepositoryImpl: BerliRepository {
             password = account.password
             dateCreated = account.dateCreated
         }
+    }
+
+    override suspend fun getAccountLogin(
+        username: String,
+        password: String
+    ): Account? = suspendTransaction {
+        AccountDAO
+            .find { (AccountTable.username eq username) and (AccountTable.password eq password) }
+            .firstOrNull()
+            ?.let(::accountDaoToModel)
     }
 }

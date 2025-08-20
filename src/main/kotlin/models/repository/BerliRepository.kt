@@ -11,4 +11,5 @@ interface BerliRepository {
     suspend fun getAllEvent(): List<Event>
     suspend fun getEvent(id: Int): Event?
     suspend fun postRegisterAccount(account: Account)
+    suspend fun getAccountLogin(username: String, password: String): Account?
 }
