@@ -65,7 +65,7 @@ fun Application.configureSerialization(repository: BerliRepository) {
                     return@get
                 }
 
-                call.respond(successResponse(event, "Event retrieved "))
+                call.respond(successResponse(event, "Event retrieved"))
             }
         }
     }
