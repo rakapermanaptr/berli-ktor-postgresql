@@ -45,52 +45,9 @@ fun Application.module() {
 }
 
 fun Application.debugModule() {
-    // Log setiap request (method + uri)
+    // log every request (method+uri)
     install(CallLogging) {
         level = Level.INFO
         format { call -> "${call.request.httpMethod.value} ${call.request.uri}" }
-    }
-
-    // CORS untuk mencegah masalah preflight selama testing
-    install(CORS) {
-        anyHost() // hanya untuk debug/testing — jangan pakai di production tanpa restrict
-        allowNonSimpleContentTypes = true
-        allowHeader(HttpHeaders.ContentType)
-        allowHeader(HttpHeaders.Accept)
-        allowHeader(HttpHeaders.Authorization)
-        allowMethod(HttpMethod.Get)
-        allowMethod(HttpMethod.Post)
-        allowMethod(HttpMethod.Put)
-        allowMethod(HttpMethod.Delete)
-        allowMethod(HttpMethod.Options)
-    }
-
-    routing {
-        // simple health
-        get("/") {
-            call.respondText("OK", ContentType.Text.Plain)
-        }
-
-        // endpoint untuk melihat semua method di /api/debug
-        route("/api/debug") {
-            get { call.respondText("GET ok") }
-            post {
-                val body = call.receiveText()
-                call.application.environment.log.info("POST body: $body")
-                call.respond(mapOf("method" to "POST", "body" to body))
-            }
-            options {
-                call.respond(HttpStatusCode.OK)
-            }
-            // wildcard: log method + uri
-            handle {
-                val m = call.request.httpMethod.value
-                val u = call.request.uri
-                call.application.environment.log.info("WILDCARD HIT -> $m $u")
-                call.respondText("wildcard $m $u")
-            }
-        }
-
-        // kamu bisa tetap mount configureSerialization(repository) setelah debug ini
     }
 }
