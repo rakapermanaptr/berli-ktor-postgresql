@@ -1,7 +1,9 @@
 package com.creospace.models.repository
 
+import com.creospace.models.domain.Account
 import com.creospace.models.domain.Event
 import com.creospace.models.domain.Report
+import com.creospace.models.entity.AccountDAO
 import com.creospace.models.entity.EventDAO
 import com.creospace.models.entity.EventTable
 import com.creospace.models.entity.ReportDAO
@@ -49,5 +51,15 @@ class BerliRepositoryImpl: BerliRepository {
             .limit(1)
             .map(::eventDaoToModel)
             .firstOrNull()
+    }
+
+    override suspend fun postRegisterAccount(account: Account) {
+        AccountDAO.new {
+            fullName = account.fullName
+            username = account.username
+            phoneNumber = account.phoneNumber
+            password = account.password
+            dateCreated = account.dateCreated
+        }
     }
 }

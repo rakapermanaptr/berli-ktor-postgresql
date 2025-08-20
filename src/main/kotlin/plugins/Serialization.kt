@@ -1,5 +1,6 @@
 package com.creospace.plugins
 
+import com.creospace.models.domain.Account
 import com.creospace.models.domain.Event
 import com.creospace.models.repository.BerliRepository
 import com.creospace.models.domain.Report
@@ -66,6 +67,14 @@ fun Application.configureSerialization(repository: BerliRepository) {
                 }
 
                 call.respond(successResponse(event, "Event retrieved"))
+            }
+
+            route("/account") {
+                post {
+                    val account = call.receive<Account>()
+                    repository.postRegisterAccount(account)
+                    call.respond(successResponse(null, "Account created"))
+                }
             }
         }
     }
