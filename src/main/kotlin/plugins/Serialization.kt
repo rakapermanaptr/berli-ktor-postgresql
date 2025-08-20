@@ -1,12 +1,10 @@
 package com.creospace.plugins
 
 import com.creospace.models.domain.Account
-import com.creospace.models.domain.Event
 import com.creospace.models.repository.BerliRepository
 import com.creospace.models.domain.Report
 import com.creospace.utils.errorResponse
 import com.creospace.utils.successResponse
-import com.sun.tools.jdeprscan.Main.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
