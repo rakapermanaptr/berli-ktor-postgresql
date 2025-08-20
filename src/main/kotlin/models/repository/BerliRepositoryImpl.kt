@@ -53,7 +53,7 @@ class BerliRepositoryImpl: BerliRepository {
             .firstOrNull()
     }
 
-    override suspend fun postRegisterAccount(account: Account) {
+    override suspend fun postRegisterAccount(account: Account): Unit = suspendTransaction  {
         AccountDAO.new {
             fullName = account.fullName
             username = account.username
