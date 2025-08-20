@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
-fun reportDaoToModel(dao: AccountDAO) = Account(
+fun accountDaoToModel(dao: AccountDAO) = Account(
     id = dao.id.value,
     fullName = dao.fullName,
     username = dao.username,
@@ -16,7 +16,7 @@ fun reportDaoToModel(dao: AccountDAO) = Account(
     dateCreated = dao.dateCreated
 )
 
-object AccountTable : IntIdTable("report") {
+object AccountTable : IntIdTable("account") {
     val fullName = varchar("full_name", 100)
     val username = varchar("username", 50)
     val phoneNumber = varchar("phone_number", 12)
