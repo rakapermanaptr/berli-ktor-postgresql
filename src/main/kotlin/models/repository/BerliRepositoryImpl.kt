@@ -14,6 +14,8 @@ import com.creospace.models.entity.eventDaoToModel
 import com.creospace.models.entity.reportDaoToModel
 import com.creospace.utils.suspendTransaction
 import org.jetbrains.exposed.sql.and
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class BerliRepositoryImpl: BerliRepository {
 
@@ -62,7 +64,8 @@ class BerliRepositoryImpl: BerliRepository {
             username = account.username
             phoneNumber = account.phoneNumber
             password = account.password
-            dateCreated = account.dateCreated
+            dateCreated = account.dateCreated ?: LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         }
     }
 

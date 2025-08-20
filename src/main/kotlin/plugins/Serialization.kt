@@ -3,6 +3,7 @@ package com.creospace.plugins
 import com.creospace.models.domain.Account
 import com.creospace.models.repository.BerliRepository
 import com.creospace.models.domain.Report
+import com.creospace.models.response.LoginResponse
 import com.creospace.utils.errorResponse
 import com.creospace.utils.successResponse
 import io.ktor.http.HttpStatusCode
@@ -100,7 +101,12 @@ fun Application.configureSerialization(repository: BerliRepository) {
                            return@post
                        }
 
-                       call.respond(HttpStatusCode.OK, successResponse(account))
+                       val loginResponse = LoginResponse(
+                           username = account.username,
+                           phoneNumber = account.phoneNumber,
+                           fullName = account.fullName
+                       )
+                       call.respond(HttpStatusCode.OK, successResponse(loginResponse))
                    }
                 }
             }

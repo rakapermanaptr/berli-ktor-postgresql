@@ -13,5 +13,5 @@ data class Account(
     val phoneNumber: String,
     val password: String,
     @SerialName("date_created")
-    val dateCreated: String,
+    val dateCreated: String? = null,
 )
