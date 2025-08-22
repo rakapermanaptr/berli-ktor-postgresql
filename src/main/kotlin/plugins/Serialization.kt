@@ -3,7 +3,9 @@ package com.creospace.plugins
 import com.creospace.models.domain.Account
 import com.creospace.models.repository.BerliRepository
 import com.creospace.models.domain.Report
+import com.creospace.models.request.ReportRequest
 import com.creospace.models.response.LoginResponse
+import com.creospace.models.utils.SupabaseStorageClient
 import com.creospace.utils.errorResponse
 import com.creospace.utils.successResponse
 import io.ktor.http.HttpStatusCode
@@ -14,6 +16,7 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.request.LoginRequest
+import java.util.Base64
 
 fun Application.configureSerialization(repository: BerliRepository) {
     install(ContentNegotiation) {
@@ -28,9 +31,50 @@ fun Application.configureSerialization(repository: BerliRepository) {
 
             route("/report") {
                 post {
-                    val report = call.receive<Report>()
-                    repository.postReport(report)
-                    call.respond(successResponse(null, "Report created"))
+//                    val report = call.receive<Report>()
+//                    repository.postReport(report)
+//                    call.respond(successResponse(null, "Report created"))
+                    val req = try {
+                        call.receive<ReportRequest>()
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.BadRequest, errorResponse("Invalid request: ${e.message}"))
+                        return@post
+                    }
+
+                    val finalImageUrl = try {
+                        val bytes = Base64.getDecoder().decode(req.image.substringAfter("base64,"))
+                        val ext = when (SupabaseStorageClient.detectImageContentType(bytes)) {
+                            "image/png" -> "png"
+                            "image/gif" -> "gif"
+                            else -> "jpg"
+                        }
+                        val objectPath = "berli/${req.userId}/${System.currentTimeMillis()}.$ext"
+                        SupabaseStorageClient.uploadBase64(objectPath, req.image)
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.InternalServerError, errorResponse("Upload failed: ${e.message}"))
+                        return@post
+                    }
+
+                    val report = ReportRequest(
+                        id = null,
+                        username = req.username,
+                        userId = req.userId,
+                        complaint = req.complaint,
+                        complaintDetails = req.complaintDetails,
+                        image = finalImageUrl,
+                        location = req.location,
+                        locationDetails = req.locationDetails,
+                        status = req.status,
+                        likeNumber = req.likeNumber,
+                        dateCreated = req.dateCreated
+                    )
+
+                    try {
+                        repository.postReport(report)
+                        call.respond(HttpStatusCode.OK, successResponse(null, "Report created"))
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.InternalServerError, errorResponse("DB Failed: ${e.message}"))
+                    }
                 }
                 get("/{id}") {
                     val id = call.parameters["id"]?.toIntOrNull()

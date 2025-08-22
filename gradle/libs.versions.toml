@@ -26,6 +26,9 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
 logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor-version" }
 cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor-version" }
+ktor-lient = { module = "io.ktor:ktor-client-core", version.ref = "ktor-version"}
+cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor-version" }
+content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor-version" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

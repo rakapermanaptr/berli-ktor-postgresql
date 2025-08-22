@@ -12,6 +12,7 @@ import com.creospace.models.entity.ReportTable
 import com.creospace.models.entity.accountDaoToModel
 import com.creospace.models.entity.eventDaoToModel
 import com.creospace.models.entity.reportDaoToModel
+import com.creospace.models.request.ReportRequest
 import com.creospace.utils.suspendTransaction
 import org.jetbrains.exposed.sql.and
 import java.time.LocalDateTime
@@ -23,7 +24,7 @@ class BerliRepositoryImpl: BerliRepository {
         ReportDAO.all().map(::reportDaoToModel)
     }
 
-    override suspend fun postReport(report: Report): Unit = suspendTransaction {
+    override suspend fun postReport(report: ReportRequest): Unit = suspendTransaction {
         ReportDAO.new {
             username = report.username
             userId = report.userId
