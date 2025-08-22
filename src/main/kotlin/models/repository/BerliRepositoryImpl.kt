@@ -24,7 +24,7 @@ class BerliRepositoryImpl: BerliRepository {
         ReportDAO.all().map(::reportDaoToModel)
     }
 
-    override suspend fun postReport(report: ReportRequest): Unit = suspendTransaction {
+    override suspend fun postReport(report: Report): Unit = suspendTransaction {
         ReportDAO.new {
             username = report.username
             userId = report.userId

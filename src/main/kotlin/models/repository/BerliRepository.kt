@@ -7,7 +7,7 @@ import com.creospace.models.request.ReportRequest
 
 interface BerliRepository {
     suspend fun getAllReport(): List<Report>
-    suspend fun postReport(report: ReportRequest)
+    suspend fun postReport(report: Report)
     suspend fun getReport(id: Int): Report?
     suspend fun getAllEvent(): List<Event>
     suspend fun getEvent(id: Int): Event?

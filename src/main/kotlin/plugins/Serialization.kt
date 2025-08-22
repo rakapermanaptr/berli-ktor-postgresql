@@ -31,11 +31,8 @@ fun Application.configureSerialization(repository: BerliRepository) {
 
             route("/report") {
                 post {
-//                    val report = call.receive<Report>()
-//                    repository.postReport(report)
-//                    call.respond(successResponse(null, "Report created"))
                     val req = try {
-                        call.receive<ReportRequest>()
+                        call.receive<Report>()
                     } catch (e: Exception) {
                         call.respond(HttpStatusCode.BadRequest, errorResponse("Invalid request: ${e.message}"))
                         return@post
@@ -55,7 +52,7 @@ fun Application.configureSerialization(repository: BerliRepository) {
                         return@post
                     }
 
-                    val report = ReportRequest(
+                    val report = Report(
                         id = null,
                         username = req.username,
                         userId = req.userId,
