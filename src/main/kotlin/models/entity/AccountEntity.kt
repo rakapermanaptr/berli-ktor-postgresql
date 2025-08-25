@@ -12,14 +12,16 @@ fun accountDaoToModel(dao: AccountDAO) = Account(
     fullName = dao.fullName,
     username = dao.username,
     phoneNumber = dao.phoneNumber,
+    email = dao.email,
     password = dao.password,
-    dateCreated = dao.dateCreated
+    dateCreated = dao.dateCreated,
 )
 
 object AccountTable : IntIdTable("account") {
     val fullName = varchar("full_name", 100)
     val username = varchar("username", 50)
     val phoneNumber = varchar("phone_number", 12)
+    val email = varchar("email", 100)
     val password = varchar("password", 50)
     val dateCreated = varchar("date_created", 100)
 }
@@ -30,6 +32,7 @@ class AccountDAO(id: EntityID<Int>) : IntEntity(id) {
     var fullName by AccountTable.fullName
     var username by AccountTable.username
     var phoneNumber by AccountTable.phoneNumber
+    var email by AccountTable.email
     var password by AccountTable.password
     var dateCreated by AccountTable.dateCreated
 }

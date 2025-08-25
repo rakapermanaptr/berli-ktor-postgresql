@@ -64,6 +64,7 @@ class BerliRepositoryImpl: BerliRepository {
             fullName = account.fullName
             username = account.username
             phoneNumber = account.phoneNumber
+            email = account.email
             password = account.password
             dateCreated = account.dateCreated ?: LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))

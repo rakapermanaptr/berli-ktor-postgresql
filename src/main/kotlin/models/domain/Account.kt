@@ -11,6 +11,7 @@ data class Account(
     val username: String,
     @SerialName("phone_number")
     val phoneNumber: String,
+    val email: String,
     val password: String,
     @SerialName("date_created")
     val dateCreated: String? = null,
