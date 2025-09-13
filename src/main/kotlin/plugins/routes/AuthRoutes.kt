@@ -19,6 +19,17 @@ fun Route.authRoutes(repository: BerliRepository) {
         route("/register") {
             post {
                 val account = call.receive<Account>()
+
+                // check existing email
+                val existingAccount = repository.findByEmail(account.email)
+                if (existingAccount != null) {
+                    call.respond(
+                        HttpStatusCode.Conflict,
+                        errorResponse("Email sudah terdaftar")
+                    )
+                    return@post
+                }
+
                 repository.postRegisterAccount(account)
                 call.respond(successResponse(null, "Account created"))
             }

@@ -3,6 +3,7 @@ package com.creospace.models.repository
 import com.creospace.models.domain.Account
 import com.creospace.models.domain.Event
 import com.creospace.models.domain.Report
+import com.creospace.models.entity.AccountDAO
 import com.creospace.models.request.ReportRequest
 
 interface BerliRepository {
@@ -12,5 +13,6 @@ interface BerliRepository {
     suspend fun getAllEvent(): List<Event>
     suspend fun getEvent(id: Int): Event?
     suspend fun postRegisterAccount(account: Account)
+    suspend fun findByEmail(email: String): AccountDAO?
     suspend fun getAccountLogin(username: String, password: String): Account?
 }

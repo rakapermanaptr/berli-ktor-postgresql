@@ -71,6 +71,10 @@ class BerliRepositoryImpl: BerliRepository {
         }
     }
 
+    override suspend fun findByEmail(email: String): AccountDAO? = suspendTransaction {
+        AccountDAO.find { AccountTable.email eq email }.firstOrNull()
+    }
+
     override suspend fun getAccountLogin(
         username: String,
         password: String
